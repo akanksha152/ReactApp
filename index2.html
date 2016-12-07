@@ -1,0 +1,89 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ReactApp</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="bower_components/babel/browser.min.js"></script>
+	<script type="text/javascript" src="bower_components/react/react.min.js"></script>
+	<script type="text/javascript" src="bower_components/react/react-dom.min.js"></script>
+	
+</head>
+<body>
+<div id="aks"></div>
+
+<script type="text/babel">
+var TodoListBooks = React.createClass({
+	             render: function(){
+	             var newbook1=function(bookname){
+                      return(
+                      <TodoListBookName>{bookname}</TodoListBookName>);
+	             };
+	             return(<ul>{this.props.items.map(newbook1)}</ul>);
+	             }
+});
+var TodoListBookName =React.createClass({
+      getInitialState: function(){
+        return{isSelected: false};
+      },
+      onChecked: function(){
+      this.setState({isSelected: !this.state.isSelected});
+      },
+	  render: function(){
+     if(this.state.isSelected){
+     return(<li><input type="checkbox" onChange={this.onChecked}/><strike>{this.props.children}</strike></li>);
+     }
+     else{
+     return(<li><input type="checkbox" onChange={this.onChecked}/>{this.props.children}</li>);
+     }
+	  }
+});
+var TodoForm = React.createClass({
+	                getInitialState: function() {
+                          return {item: ""};
+                          },
+                     handleSubmit: function(e) {
+                        e.preventDefault();
+                        this.props.onFormSubmit(this.state.item);
+                        this.setState({item: ''}) ;
+                        return;
+                     },  
+                  
+                     onChange: function(e){
+                     this.setState({ item: e.target.value });
+                     },
+                     render: function(){
+                     return(
+                     <form onSubmit={this.handleSubmit}>
+                        <input type='text' onChange={this.onChange} value={this.state.item}/>
+                        <input type="submit" value='Add'/>
+                      </form>
+                     );  
+                     }
+});
+ var TodoApp = React.createClass({
+                          getInitialState: function() {
+                          return {items: [' Fundamental of digital electronics',' Network Theory',' Microelectronics']};
+                          },
+
+                          updateItems: function(newbook){
+                          this.setState({
+                          items: this.state.items.concat([newbook])
+                          });
+                          },
+    render: function(){  
+    return(<div>
+    <h1>Books</h1>
+    <TodoForm onFormSubmit={this.updateItems}/>
+    <TodoListBooks items={this.state.items}/>
+    </div>);
+     }
+    
+     });
+	ReactDOM.render(<TodoApp/>,document.getElementById("aks"));
+
+</script>
+
+</body>
+</html>
